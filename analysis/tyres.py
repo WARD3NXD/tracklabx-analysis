@@ -1,6 +1,6 @@
 import pandas as pd
 
-def get_speed_trace(session) -> dict:
+def get_tyre_degradation(session) -> dict:
     try:
         fastest = session.laps.pick_fastest()
         if fastest is None:
