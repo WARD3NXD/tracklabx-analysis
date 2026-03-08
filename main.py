@@ -56,18 +56,3 @@ async def get_race_analysis(year: int, round_number: int):
             status_code=500,
             detail=f"Analysis failed: {str(e)}"
         )
-```
-
-Then create the analysis folder with all 6 files from the previous prompt:
-```
-tracklabx-analysis/
-  main.py
-  requirements.txt
-  analysis/
-    __init__.py          ← empty file, needed for Python imports
-    positions.py
-    laptimes.py
-    pitstops.py
-    tyres.py
-    speed.py
-    telemetry.py
