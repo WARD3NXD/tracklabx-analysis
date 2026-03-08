@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import fastf1
 import os
 
+os.makedirs('/cache', exist_ok=True)
 fastf1.Cache.enable_cache('/cache')
 
 app = FastAPI(title="TrackLabX Analysis API")
