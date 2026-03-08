@@ -15,12 +15,15 @@ def get_lap_comparison(session) -> dict:
         lap_data = []
 
         for _, lap in driver_laps.iterrows():
-            if pd.notna(lap['LapTime']):
-                lap_data.append({
-                    'lap': int(lap['LapNumber']),
-                    'timeMs': int(lap['LapTime'].total_seconds() * 1000),
-                    'compound': lap['Compound'] if pd.notna(lap['Compound']) else 'UNKNOWN',
-                })
+            try:
+                if pd.notna(lap['LapTime']) and pd.notna(lap['LapNumber']):
+                    lap_data.append({
+                        'lap':      int(lap['LapNumber']),
+                        'timeMs':   int(lap['LapTime'].total_seconds() * 1000),
+                        'compound': str(lap['Compound']) if pd.notna(lap['Compound']) else 'UNKNOWN',
+                    })
+            except (ValueError, TypeError):
+                continue
 
         series[driver] = {
             'team': team,
@@ -29,5 +32,5 @@ def get_lap_comparison(session) -> dict:
 
     return {
         'drivers': top10,
-        'series': series,
+        'series':  series,
     }
