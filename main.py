@@ -1,10 +1,19 @@
+import os
+import fastf1
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import fastf1
-import os
 
-os.makedirs('/cache', exist_ok=True)
-fastf1.Cache.enable_cache('/cache')
+from analysis.positions  import get_position_changes
+from analysis.laptimes   import get_lap_comparison
+from analysis.pitstops   import get_pit_strategy
+from analysis.tyres      import get_tyre_degradation
+from analysis.speed      import get_speed_trace
+from analysis.telemetry  import get_fastest_lap_telemetry
+
+# Local cache directory — always writable on Render free tier
+CACHE_DIR = os.path.join(os.path.dirname(__file__), 'fastf1_cache')
+os.makedirs(CACHE_DIR, exist_ok=True)
+fastf1.Cache.enable_cache(CACHE_DIR)
 
 app = FastAPI(title="TrackLabX Analysis API")
 
@@ -17,13 +26,6 @@ app.add_middleware(
     allow_methods=["GET"],
     allow_headers=["*"],
 )
-
-from analysis.positions  import get_position_changes
-from analysis.laptimes   import get_lap_comparison
-from analysis.pitstops   import get_pit_strategy
-from analysis.tyres      import get_tyre_degradation
-from analysis.speed      import get_speed_trace
-from analysis.telemetry  import get_fastest_lap_telemetry
 
 @app.get("/health")
 def health():
